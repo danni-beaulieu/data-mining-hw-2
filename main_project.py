@@ -1,6 +1,46 @@
+import math
+
 import pandas as pd
+from sklearn.model_selection import KFold
 from sklearn.naive_bayes import BernoulliNB, GaussianNB, CategoricalNB, MultinomialNB
 from sklearn.svm import SVC
+
+
+def doKFold(X, y, models, names, k):
+    num_models = len(models)
+
+    accuracy_array_tr = [[None for i in range(k)] for j in range(num_models)]
+    accuracy_array_te = [[None for i in range(k)] for j in range(num_models)]
+    average_accuracy_tr = [None] * num_models
+    average_accuracy_te = [None] * num_models
+
+    kfold = KFold(n_splits=k, shuffle=True, random_state=111)
+    folds = [next(kfold.split(X)) for i in range(k)]
+
+    for split_i in range(k):
+        X_tr = X[folds[split_i][0]]
+        X_te = X[folds[split_i][1]]
+        y_tr = y[folds[split_i][0]]
+        y_te = y[folds[split_i][1]]
+
+        for j in range(len(models)):
+            models[j].fit(X_tr, y_tr)
+            accuracy_array_tr[j][split_i] = models[j].score(X_tr, y_tr)
+            accuracy_array_te[j][split_i] = models[j].score(X_te, y_te)
+
+    bestparam = 0
+    avgaccuracy = -1 * math.inf
+    for j in range(num_models):
+        average_accuracy_tr[j] = sum(accuracy_array_tr[j]) / k
+        average_accuracy_te[j] = sum(accuracy_array_te[j]) / k
+        print('Model : ', names[j])
+        print('Accuracy of each fold - {}'.format(accuracy_array_te[j]))
+        print('Avg accuracy error : {}'.format(average_accuracy_te[j]))
+        if (average_accuracy_te[j] > avgaccuracy):
+            bestparam = j
+            avgaccuracy = average_accuracy_te[j]
+
+    return models[bestparam], average_accuracy_te
 
 
 def do_split(df, frTest):
@@ -10,6 +50,8 @@ def do_split(df, frTest):
 
 
 print("BEGIN")
+
+# Loading and shaping
 
 df = pd.read_csv("letter-recognition.data", header=None)
 print(df.shape)
@@ -48,15 +90,16 @@ od_y_train = od_raw_data_train[:, 0]
 od_X_test = od_raw_data_test[:, 1:(od_raw_data_test.shape[1])]
 od_y_test = od_raw_data_test[:, 0]
 
+# Model exploration
 hk_mNB = MultinomialNB()
 hk_mNB.fit(hk_X_train, hk_y_train)
 hk_mNB_p = hk_mNB.predict(hk_X_train)
 print(hk_mNB.score(hk_X_train, hk_y_train))
 
-hk_cNB = CategoricalNB(min_categories=2)
-hk_cNB.fit(hk_X_train, hk_y_train)
-hk_cNB_p = hk_cNB.predict(hk_X_train)
-print(hk_cNB.score(hk_X_train, hk_y_train))
+hk_bNB = BernoulliNB()
+hk_bNB.fit(hk_X_train, hk_y_train)
+hk_bNB_p = hk_bNB.predict(hk_X_train)
+print(hk_bNB.score(hk_X_train, hk_y_train))
 
 hk_gNB = GaussianNB()
 hk_gNB.fit(hk_X_train, hk_y_train)
@@ -83,10 +126,10 @@ ym_mNB.fit(ym_X_train, ym_y_train)
 ym_mNB_p = ym_mNB.predict(ym_X_train)
 print(ym_mNB.score(ym_X_train, ym_y_train))
 
-ym_cNB = CategoricalNB(min_categories=2)
-ym_cNB.fit(ym_X_train, ym_y_train)
-ym_cNB_p = ym_cNB.predict(ym_X_train)
-print(ym_cNB.score(ym_X_train, ym_y_train))
+ym_bNB = BernoulliNB()
+ym_bNB.fit(ym_X_train, ym_y_train)
+ym_bNB_p = ym_bNB.predict(ym_X_train)
+print(ym_bNB.score(ym_X_train, ym_y_train))
 
 ym_gNB = GaussianNB()
 ym_gNB.fit(ym_X_train, ym_y_train)
@@ -113,10 +156,10 @@ od_mNB.fit(od_X_train, od_y_train)
 od_mNB_p = od_mNB.predict(od_X_train)
 print(od_mNB.score(od_X_train, od_y_train))
 
-od_cNB = CategoricalNB(min_categories=2)
-od_cNB.fit(od_X_train, od_y_train)
-od_cNB_p = od_cNB.predict(od_X_train)
-print(od_cNB.score(od_X_train, od_y_train))
+od_bNB = BernoulliNB()
+od_bNB.fit(od_X_train, od_y_train)
+od_bNB_p = od_bNB.predict(od_X_train)
+print(od_bNB.score(od_X_train, od_y_train))
 
 od_gNB = GaussianNB()
 od_gNB.fit(od_X_train, od_y_train)
@@ -137,5 +180,27 @@ od_rSVM = SVC(kernel='rbf')
 od_rSVM.fit(od_X_train, od_y_train)
 od_rSVM_p = od_rSVM.predict(od_X_train)
 print(od_rSVM.score(od_X_train, od_y_train))
+
+# 5-fold cross-validation
+
+hk_bestNB, hkNB_accuracies = doKFold(hk_X_train, hk_y_train,
+                                   [MultinomialNB(), BernoulliNB(), GaussianNB()],
+                                   ["Multinomial NB", "Bernoulli NB", "Gaussian NB"], 5)
+ym_bestNB, ymNB_accuracies = doKFold(ym_X_train, ym_y_train,
+                                   [MultinomialNB(), BernoulliNB(), GaussianNB()],
+                                   ["Multinomial NB", "Bernoulli NB", "Gaussian NB"], 5)
+od_bestNB, odNB_accuracies = doKFold(od_X_train, od_y_train,
+                                   [MultinomialNB(), BernoulliNB(), GaussianNB()],
+                                   ["Multinomial NB", "Bernoulli NB", "Gaussian NB"], 5)
+
+hk_bestSVM, hkSVM_accuracies = doKFold(hk_X_train, hk_y_train,
+                                   [MultinomialNB(), BernoulliNB(), GaussianNB()],
+                                   ["Multinomial NB", "Bernoulli NB", "Gaussian NB"], 5)
+ym_bestSVM, ymSVM_accuracies = doKFold(ym_X_train, ym_y_train,
+                                   [SVC(kernel='linear'), SVC(kernel='poly'), SVC(kernel='rbf')],
+                                   ["Linear SVM", "Polynomial SVM", "RBF SVM"], 5)
+od_bestSVM, odSVM_accuracies = doKFold(od_X_train, od_y_train,
+                                   [SVC(kernel='linear'), SVC(kernel='poly'), SVC(kernel='rbf')],
+                                   ["Linear SVM", "Polynomial SVM", "RBF SVM"], 5)
 
 print("END")
