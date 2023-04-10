@@ -139,7 +139,8 @@ with open('output.txt', 'w+') as np_out:
 
     namesNB = ["Multinomial NB", "Bernoulli NB", "Gaussian NB"]
     namesSVM = ["Linear SVM", "Polynomial SVM", "RBF SVM"]
-    namesKNN = ["1-NN", "2-NN", "3-NN", "4-NN", "5-NN"]
+    namesKNN = [1, 2, 3, 4, 5]
+    namesKNNMet = ["Hamming", "Manhattan", "Euclidean", "Cosine"]
 
     hk_bestNB, hkNB_accuracies, hkNB_time, hkNB_name = doKFold(hk_X_train, hk_y_train,
                                                             [MultinomialNB(), BernoulliNB(), GaussianNB()], namesNB, 5)
@@ -183,6 +184,43 @@ with open('output.txt', 'w+') as np_out:
                                                                     KNeighborsClassifier(n_neighbors=3),
                                                                     KNeighborsClassifier(n_neighbors=4),
                                                                     KNeighborsClassifier(n_neighbors=5)], namesKNN, 5)
+
+    hk_bestKNNMet, hkKNNMet_accuracies, hkKNNMet_time, hkKNNMet_name = doKFold(hk_X_train, hk_y_train,
+                                                        [KNeighborsClassifier(n_neighbors=hkKNN_name, metric='hamming'),
+                                                        KNeighborsClassifier(n_neighbors=hkKNN_name, metric='manhattan'),
+                                                        KNeighborsClassifier(n_neighbors=hkKNN_name, metric='euclidean'),
+                                                        KNeighborsClassifier(n_neighbors=hkKNN_name, metric='cosine')],
+                                                                               namesKNNMet, 5)
+    ym_bestKNNMet, ymKNNMet_accuracies, ymKNNMet_time, ymKNNMet_name = doKFold(ym_X_train, ym_y_train,
+                                                                   [KNeighborsClassifier(n_neighbors=ymKNN_name,
+                                                                                         metric='hamming'),
+                                                                    KNeighborsClassifier(n_neighbors=ymKNN_name,
+                                                                                         metric='manhattan'),
+                                                                    KNeighborsClassifier(n_neighbors=ymKNN_name,
+                                                                                         metric='euclidean'),
+                                                                    KNeighborsClassifier(n_neighbors=ymKNN_name,
+                                                                                         metric='cosine')],
+                                                                   namesKNNMet, 5)
+    od_bestKNNMet, odKNNMet_accuracies, odKNNMet_time, odKNNMet_name = doKFold(od_X_train, od_y_train,
+                                                                   [KNeighborsClassifier(n_neighbors=odKNN_name,
+                                                                                         metric='hamming'),
+                                                                    KNeighborsClassifier(n_neighbors=odKNN_name,
+                                                                                         metric='manhattan'),
+                                                                    KNeighborsClassifier(n_neighbors=odKNN_name,
+                                                                                         metric='euclidean'),
+                                                                    KNeighborsClassifier(n_neighbors=odKNN_name,
+                                                                                         metric='cosine')],
+                                                                   namesKNNMet, 5)
+    all_bestKNNMet, allKNNMet_accuracies, allKNNMet_time, allKNNMet_name = doKFold(all_X_train, all_y_train,
+                                                                   [KNeighborsClassifier(n_neighbors=allKNN_name,
+                                                                                         metric='hamming'),
+                                                                    KNeighborsClassifier(n_neighbors=allKNN_name,
+                                                                                         metric='manhattan'),
+                                                                    KNeighborsClassifier(n_neighbors=allKNN_name,
+                                                                                         metric='euclidean'),
+                                                                    KNeighborsClassifier(n_neighbors=allKNN_name,
+                                                                                         metric='cosine')],
+                                                                   namesKNNMet, 5)
 
     # 5-fold cross-validation (processed)
 
@@ -232,6 +270,44 @@ with open('output.txt', 'w+') as np_out:
                                                                                     KNeighborsClassifier(n_neighbors=4),
                                                                                     KNeighborsClassifier(
                                                                                         n_neighbors=5)], namesKNN, 5)
+
+
+    hk_bestKNNMet_pp, hkKNNMet_accuracies_pp, hkKNNMet_time_pp, hkKNNMet_name_pp = doKFold(hk_X_train_pp, hk_y_train,
+                                                        [KNeighborsClassifier(n_neighbors=hkKNN_name_pp, metric='hamming'),
+                                                        KNeighborsClassifier(n_neighbors=hkKNN_name_pp, metric='manhattan'),
+                                                        KNeighborsClassifier(n_neighbors=hkKNN_name_pp, metric='euclidean'),
+                                                        KNeighborsClassifier(n_neighbors=hkKNN_name_pp, metric='cosine')],
+                                                                                           namesKNNMet, 5)
+    ym_bestKNNMet_pp, ymKNNMet_accuracies_pp, ymKNNMet_time_pp, ymKNNMet_name_pp = doKFold(ym_X_train_pp, ym_y_train,
+                                                                   [KNeighborsClassifier(n_neighbors=ymKNN_name_pp,
+                                                                                         metric='hamming'),
+                                                                    KNeighborsClassifier(n_neighbors=ymKNN_name_pp,
+                                                                                         metric='manhattan'),
+                                                                    KNeighborsClassifier(n_neighbors=ymKNN_name_pp,
+                                                                                         metric='euclidean'),
+                                                                    KNeighborsClassifier(n_neighbors=ymKNN_name_pp,
+                                                                                         metric='cosine')],
+                                                                   namesKNNMet, 5)
+    od_bestKNNMet_pp, odKNNMet_accuracies_pp, odKNNMet_time_pp, odKNNMet_name_pp = doKFold(od_X_train_pp, od_y_train,
+                                                                   [KNeighborsClassifier(n_neighbors=odKNN_name_pp,
+                                                                                         metric='hamming'),
+                                                                    KNeighborsClassifier(n_neighbors=odKNN_name_pp,
+                                                                                         metric='manhattan'),
+                                                                    KNeighborsClassifier(n_neighbors=odKNN_name_pp,
+                                                                                         metric='euclidean'),
+                                                                    KNeighborsClassifier(n_neighbors=odKNN_name_pp,
+                                                                                         metric='cosine')],
+                                                                   namesKNNMet, 5)
+    all_bestKNNMet_pp, allKNNMet_accuracies_pp, allKNNMet_time_pp, allKNNMet_name_pp = doKFold(all_X_train_pp, all_y_train,
+                                                                   [KNeighborsClassifier(n_neighbors=allKNN_name_pp,
+                                                                                         metric='hamming'),
+                                                                    KNeighborsClassifier(n_neighbors=allKNN_name_pp,
+                                                                                         metric='manhattan'),
+                                                                    KNeighborsClassifier(n_neighbors=allKNN_name_pp,
+                                                                                         metric='euclidean'),
+                                                                    KNeighborsClassifier(n_neighbors=allKNN_name_pp,
+                                                                                         metric='cosine')],
+                                                                   namesKNNMet, 5)
 
     # Plot and score test
 
@@ -300,6 +376,27 @@ with open('output.txt', 'w+') as np_out:
     plt.savefig('./non-preprocessed/' + "All KNN Non-Processed" + '.png', bbox_inches='tight')
     plt.show()
 
+    sns.boxplot(data=pd.DataFrame(hkKNNMet_accuracies, namesKNNMet).T, medianprops=dict(color="red", alpha=0.7)).set(title="H/K KNN Metric Non-Processed")
+    plt.xlabel("Metric")
+    plt.ylabel("Accuracy")
+    plt.savefig('./non-preprocessed/' + "H-K KNN Metric Non-Processed" + '.png', bbox_inches='tight')
+    plt.show()
+    sns.boxplot(data=pd.DataFrame(ymKNNMet_accuracies, namesKNNMet).T, medianprops=dict(color="red", alpha=0.7)).set(title="Y/M KNN Metric Non-Processed")
+    plt.xlabel("Metric")
+    plt.ylabel("Accuracy")
+    plt.savefig('./non-preprocessed/' + "Y-M KNN Metric Non-Processed" + '.png', bbox_inches='tight')
+    plt.show()
+    sns.boxplot(data=pd.DataFrame(odKNNMet_accuracies, namesKNNMet).T, medianprops=dict(color="red", alpha=0.7)).set(title="O/D KNN Metric Non-Processed")
+    plt.xlabel("Metric")
+    plt.ylabel("Accuracy")
+    plt.savefig('./non-preprocessed/' + "O-D KNN Metric Non-Processed" + '.png', bbox_inches='tight')
+    plt.show()
+    sns.boxplot(data=pd.DataFrame(allKNNMet_accuracies, namesKNNMet).T, medianprops=dict(color="red", alpha=0.7)).set(title="All KNN Metric Non-Processed")
+    plt.xlabel("Metric")
+    plt.ylabel("Accuracy")
+    plt.savefig('./non-preprocessed/' + "All KNN Metric Non-Processed" + '.png', bbox_inches='tight')
+    plt.show()
+
     sns.boxplot(data=pd.DataFrame(hkNB_accuracies_pp, namesNB).T, medianprops=dict(color="red", alpha=0.7)).set(title="H/K NB Processed")
     plt.xlabel("Distribution")
     plt.ylabel("Accuracy")
@@ -363,49 +460,96 @@ with open('output.txt', 'w+') as np_out:
     plt.savefig('./preprocessed/' + "All KNN Processed" + '.png', bbox_inches='tight')
     plt.show()
 
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(hkNB_name, hk_bestNB.score(hk_X_test, hk_y_test),
+    sns.boxplot(data=pd.DataFrame(hkKNNMet_accuracies_pp, namesKNNMet).T, medianprops=dict(color="red", alpha=0.7)).set(
+        title="H/K KNN Metric Processed")
+    plt.xlabel("Metric")
+    plt.ylabel("Accuracy")
+    plt.savefig('./preprocessed/' + "H-K KNN Metric Processed" + '.png', bbox_inches='tight')
+    plt.show()
+    sns.boxplot(data=pd.DataFrame(ymKNNMet_accuracies_pp, namesKNNMet).T, medianprops=dict(color="red", alpha=0.7)).set(
+        title="Y/M KNN Metric Processed")
+    plt.xlabel("Metric")
+    plt.ylabel("Accuracy")
+    plt.savefig('./preprocessed/' + "Y-M KNN Metric Processed" + '.png', bbox_inches='tight')
+    plt.show()
+    sns.boxplot(data=pd.DataFrame(odKNNMet_accuracies_pp, namesKNNMet).T, medianprops=dict(color="red", alpha=0.7)).set(
+        title="O/D KNN Metric Processed")
+    plt.xlabel("Metric")
+    plt.ylabel("Accuracy")
+    plt.savefig('./preprocessed/' + "O-D KNN Metric Processed" + '.png', bbox_inches='tight')
+    plt.show()
+    sns.boxplot(data=pd.DataFrame(allKNNMet_accuracies_pp, namesKNNMet).T, medianprops=dict(color="red", alpha=0.7)).set(
+        title="All KNN Metric Processed")
+    plt.xlabel("Metric")
+    plt.ylabel("Accuracy")
+    plt.savefig('./preprocessed/' + "All KNN Metric Processed" + '.png', bbox_inches='tight')
+    plt.show()
+
+    print("NB H/K Model: {} - Final accuracy: {} - Run time: {}".format(hkNB_name, hk_bestNB.score(hk_X_test, hk_y_test),
                                                                  hkNB_time))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(ymNB_name, ym_bestNB.score(ym_X_test, ym_y_test),
+    print("NB Y/M Model: {} - Final accuracy: {} - Run time: {}".format(ymNB_name, ym_bestNB.score(ym_X_test, ym_y_test),
                                                                  ymNB_time))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(odNB_name, od_bestNB.score(od_X_test, od_y_test),
+    print("NB O/D Model: {} - Final accuracy: {} - Run time: {}".format(odNB_name, od_bestNB.score(od_X_test, od_y_test),
                                                                  odNB_time))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(allNB_name, all_bestNB.score(all_X_test, all_y_test),
+    print("NB All Model: {} - Final accuracy: {} - Run time: {}".format(allNB_name, all_bestNB.score(all_X_test, all_y_test),
                                                                  allNB_time))
 
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(hkSVM_name, hk_bestSVM.score(hk_X_test, hk_y_test),
+    print("SVM H/K Model: {} - Final accuracy: {} - Run time: {}".format(hkSVM_name, hk_bestSVM.score(hk_X_test, hk_y_test),
                                                                  hkSVM_time))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(ymSVM_name, ym_bestSVM.score(ym_X_test, ym_y_test),
+    print("SVM Y/M Model: {} - Final accuracy: {} - Run time: {}".format(ymSVM_name, ym_bestSVM.score(ym_X_test, ym_y_test),
                                                                  ymSVM_time))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(odSVM_name, od_bestSVM.score(od_X_test, od_y_test),
+    print("SVM O/D Model: {} - Final accuracy: {} - Run time: {}".format(odSVM_name, od_bestSVM.score(od_X_test, od_y_test),
                                                                  odSVM_time))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(allSVM_name, all_bestSVM.score(all_X_test, all_y_test),
+    print("SVM All Model: {} - Final accuracy: {} - Run time: {}".format(allSVM_name, all_bestSVM.score(all_X_test, all_y_test),
                                                                  allSVM_time))
 
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(hkNB_name_pp,
+    print("KNN H/K Model: {} {} - Final accuracy: {} - Run time: {}".format(hkKNN_name, hkKNNMet_name, hk_bestKNNMet.score(hk_X_test, hk_y_test),
+                                                                 hkKNN_time))
+    print("KNN Y/M Model: {} {} - Final accuracy: {} - Run time: {}".format(ymKNN_name, ymKNNMet_name, ym_bestKNNMet.score(ym_X_test, ym_y_test),
+                                                                 ymKNN_time))
+    print("KNN O/D Model: {} {} - Final accuracy: {} - Run time: {}".format(odKNN_name, odKNNMet_name, od_bestKNNMet.score(od_X_test, od_y_test),
+                                                                 odKNN_time))
+    print("KNN All Model: {} {} - Final accuracy: {} - Run time: {}".format(allKNN_name, allKNNMet_name, all_bestKNNMet.score(all_X_test, all_y_test),
+                                                                 allKNN_time))
+
+    print("PP NB H/K Model: {} - Final accuracy: {} - Run time: {}".format(hkNB_name_pp,
                                                                  hk_bestNB_pp.score(hk_X_test_pp, hk_y_test),
                                                                  hkNB_time_pp))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(ymNB_name_pp,
+    print("PP NB Y/M Model: {} - Final accuracy: {} - Run time: {}".format(ymNB_name_pp,
                                                                  ym_bestNB_pp.score(ym_X_test_pp, ym_y_test),
                                                                  ymNB_time_pp))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(odNB_name_pp,
+    print("PP NB O/D Model: {} - Final accuracy: {} - Run time: {}".format(odNB_name_pp,
                                                                  od_bestNB_pp.score(od_X_test_pp, od_y_test),
                                                                  odNB_time_pp))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(allNB_name_pp,
+    print("PP NB All Model: {} - Final accuracy: {} - Run time: {}".format(allNB_name_pp,
                                                                  all_bestNB_pp.score(all_X_test_pp, all_y_test),
                                                                  allNB_time_pp))
 
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(hkSVM_name_pp,
+    print("PP SVM H/K Model: {} - Final accuracy: {} - Run time: {}".format(hkSVM_name_pp,
                                                                  hk_bestSVM_pp.score(hk_X_test_pp, hk_y_test),
                                                                  hkSVM_time_pp))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(ymSVM_name_pp,
+    print("PP SVM Y/M Model: {} - Final accuracy: {} - Run time: {}".format(ymSVM_name_pp,
                                                                  ym_bestSVM_pp.score(ym_X_test_pp, ym_y_test),
                                                                  ymSVM_time_pp))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(odSVM_name_pp,
+    print("PP SVM O/D Model: {} - Final accuracy: {} - Run time: {}".format(odSVM_name_pp,
                                                                  od_bestSVM_pp.score(od_X_test_pp, od_y_test),
                                                                  odSVM_time_pp))
-    print("Model: {} - Final accuracy: {} - Run time: {}".format(allSVM_name_pp,
+    print("PP SVM All Model: {} - Final accuracy: {} - Run time: {}".format(allSVM_name_pp,
                                                                  all_bestSVM_pp.score(all_X_test_pp, all_y_test),
                                                                  allSVM_time_pp))
+
+    print("PP KNN H/K Model: {} {} - Final accuracy: {} - Run time: {}".format(hkKNN_name_pp, hkKNNMet_name_pp,
+                                                                 hk_bestKNN_pp.score(hk_X_test_pp, hk_y_test),
+                                                                 hkKNN_time_pp))
+    print("PP KNN Y/M Model: {} {} - Final accuracy: {} - Run time: {}".format(ymKNN_name_pp, ymKNNMet_name_pp,
+                                                                 ym_bestKNN_pp.score(ym_X_test_pp, ym_y_test),
+                                                                 ymKNN_time_pp))
+    print("PP KNN O/D Model: {} {} - Final accuracy: {} - Run time: {}".format(odKNN_name_pp, odKNNMet_name_pp,
+                                                                 od_bestKNN_pp.score(od_X_test_pp, od_y_test),
+                                                                 odKNN_time_pp))
+    print("PP KNN All Model: {} {} - Final accuracy: {} - Run time: {}".format(allKNN_name_pp, allKNNMet_name_pp,
+                                                                 all_bestKNN_pp.score(all_X_test_pp, all_y_test),
+                                                                 allKNN_time_pp))
 
     print("END")
     sys.stdout = original_stdout
